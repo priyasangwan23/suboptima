@@ -2,42 +2,64 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from './api';
 import { 
+  User,
   Mail, 
   Lock, 
-  Eye, 
   ArrowRight, 
   TrendingDown, 
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  CheckCircle2
 } from 'lucide-react';
 import './index.css';
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = async (e) => {
+  const { name, email, password, confirmPassword } = formData;
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match');
+    }
+
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/login', {
+      const response = await api.post('/auth/register', {
+        name,
         email,
         password
       });
 
+      console.log('Registration Success:', response.data);
+
       if (response.data && response.data.token) {
+        // Automatically log the user in
         localStorage.setItem('token', response.data.token);
         navigate('/dashboard');
       } else {
-        setError('Login failed: No token received');
+        // Fallback: redirect to login if no token returned
+        navigate('/');
       }
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      console.error('Registration error:', err);
+      const message = err.response?.data?.message || 'Registration failed. Please try again.';
       setError(message);
     } finally {
       setLoading(false);
@@ -51,25 +73,25 @@ function Login() {
         <div className="left-content">
           <div className="logo">SubOptima</div>
           <h1 className="headline">
-            Optimize your SaaS spend with AI
+            Start your optimization journey
           </h1>
           <p className="subheadline">
-            Gain full visibility into your organization's software landscape. 
-            Reduce waste, automate renewals, and scale with confidence.
+            Join 500+ companies saving an average of 25% on their SaaS stack. 
+            Set up your account in less than 2 minutes.
           </p>
 
           <div className="savings-card">
             <div className="card-header">
               <div className="icon-bg">
-                <TrendingDown size={24} color="white" />
+                <CheckCircle2 size={24} color="white" />
               </div>
               <div className="card-text">
-                <span className="card-label">AVERAGE SAVINGS</span>
-                <span className="card-value">24.8% annually</span>
+                <span className="card-label">TRUSTED BY</span>
+                <span className="card-value">Enterprise Teams</span>
               </div>
             </div>
             <div className="progress-container">
-              <div className="progress-bar"></div>
+              <div className="progress-bar" style={{ width: '100%' }}></div>
             </div>
           </div>
         </div>
@@ -79,8 +101,8 @@ function Login() {
       <section className="right-panel">
         <div className="login-form-container">
           <div className="welcome-section">
-            <h2 className="welcome-title">Welcome back</h2>
-            <p className="welcome-subtitle">Enter your credentials to access your dashboard</p>
+            <h2 className="welcome-title">Create your account</h2>
+            <p className="welcome-subtitle">Get started with SubOptima today</p>
           </div>
 
           {error && (
@@ -101,26 +123,22 @@ function Login() {
             </div>
           )}
 
-          <div className="social-buttons">
-            <button className="social-btn" type="button">
-              <img 
-                src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" 
-                alt="Google" 
-                style={{ width: '18px', height: '18px' }}
-              />
-              Google
-            </button>
-            <button className="social-btn" type="button">
-              <ShieldCheck size={16} />
-              SSO
-            </button>
-          </div>
+          <form onSubmit={handleRegister}>
+            <div className="form-group">
+              <label htmlFor="name">Full Name</label>
+              <div className="input-wrapper">
+                <User className="input-icon" size={16} />
+                <input 
+                  type="text" 
+                  id="name" 
+                  placeholder="John Doe" 
+                  value={name}
+                  onChange={onChange}
+                  required 
+                />
+              </div>
+            </div>
 
-          <div className="divider">
-            <span>Or continue with</span>
-          </div>
-
-          <form onSubmit={handleSignIn}>
             <div className="form-group">
               <label htmlFor="email">Work Email</label>
               <div className="input-wrapper">
@@ -130,54 +148,55 @@ function Login() {
                   id="email" 
                   placeholder="name@company.com" 
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={onChange}
                   required 
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <div className="label-row">
-                <label htmlFor="password">Password</label>
-                <a href="#" className="forgot-password">Forgot password?</a>
-              </div>
+              <label htmlFor="password">Password</label>
               <div className="input-wrapper">
                 <Lock className="input-icon" size={16} />
                 <input 
                   type="password" 
                   id="password" 
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={onChange}
+                  minLength={6}
                   required 
                 />
-                <Eye className="eye-icon" size={16} />
               </div>
             </div>
 
-            <label className="remember-me">
-              <input type="checkbox" />
-              Remember me for 30 days
-            </label>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <div className="input-wrapper">
+                <Lock className="input-icon" size={16} />
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={onChange}
+                  required 
+                />
+              </div>
+            </div>
 
             <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in to Dashboard'} <ArrowRight size={16} />
+              {loading ? 'Creating account...' : 'Create Account'} <ArrowRight size={16} />
             </button>
           </form>
 
           <p className="signup-text">
-            Don't have an account? <Link to="/register" className="signup-link">Start 14-day free trial</Link>
+            Already have an account? <Link to="/" className="signup-link">Sign in instead</Link>
           </p>
-
-          <footer className="footer-links">
-            <a href="#" className="footer-link">Privacy Policy</a>
-            <a href="#" className="footer-link">Terms of Service</a>
-            <a href="#" className="footer-link">Support</a>
-          </footer>
         </div>
       </section>
     </div>
   );
 }
 
-export default Login;
+export default Register;
