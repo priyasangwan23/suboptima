@@ -82,6 +82,37 @@ const Subscriptions = () => {
     return status?.toLowerCase() || 'healthy';
   };
 
+  const handleExportCSV = () => {
+    if (filteredSubs.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    const headers = ["Service Name", "Category", "Monthly Cost", "Renewal Date", "Status"];
+    
+    const rows = filteredSubs.map(sub => [
+      `"${sub.name.replace(/"/g, '""')}"`,
+      `"${sub.category}"`,
+      sub.cost,
+      new Date(sub.renewalDate).toLocaleDateString(),
+      sub.status
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `subscriptions_export_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Filtering Logic
   const filteredSubs = subs.filter(sub => {
     // Search filter
@@ -199,7 +230,7 @@ const Subscriptions = () => {
             <p style={{fontSize: '0.85rem'}}>Manage, monitor and optimize {filteredSubs.length} services.</p>
           </div>
           <div className="header-actions">
-            <button className="btn-secondary">
+            <button className="btn-secondary" onClick={handleExportCSV}>
               <Download size={14} />
               Export CSV
             </button>
@@ -250,7 +281,7 @@ const Subscriptions = () => {
           )}
 
           {loading ? (
-            <div style={{ padding: '5rem', textAlign: 'center', color: '#94a3b8' }}>
+            <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
               <Loader2 size={40} className="animate-spin" style={{ margin: '0 auto 1rem' }} />
               <p>Loading your subscriptions...</p>
             </div>
@@ -312,7 +343,7 @@ const Subscriptions = () => {
                 <tbody>
                   {filteredSubs.length === 0 ? (
                     <tr>
-                      <td colSpan="6" style={{padding: '4rem', textAlign: 'center', color: '#94a3b8'}}>
+                      <td colSpan="6" style={{padding: '4rem', textAlign: 'center', color: 'var(--text-muted)'}}>
                         <Search size={32} style={{opacity: 0.2, marginBottom: '1rem'}} />
                         <p>No subscriptions found matching your criteria.</p>
                       </td>
@@ -321,7 +352,7 @@ const Subscriptions = () => {
                     <tr key={sub._id}>
                       <td style={{padding: '1rem 1.5rem'}}>
                         <div className="service-cell">
-                          <div className="service-icon-bg" style={{background: '#f1f5f9', width: '36px', height: '36px', borderRadius: '8px', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                          <div className="service-icon-bg" style={{background: 'var(--input-bg)', width: '36px', height: '36px', borderRadius: '8px', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <Hash size={14} />
                           </div>
                           <div className="service-info">
@@ -354,7 +385,7 @@ const Subscriptions = () => {
                         <div style={{ position: 'relative' }}>
                           <button 
                             onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === sub._id ? null : sub._id); }} 
-                            style={{ border: 'none', background: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.5rem' }}
+                            style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem' }}
                           >
                             <MoreVertical size={16} />
                           </button>
@@ -415,8 +446,8 @@ const Subscriptions = () => {
           top: 100%;
           right: 0;
           margin-top: 0.5rem;
-          background: white;
-          border: 1px solid #e2e8f0;
+          background: var(--white);
+          border: 1px solid var(--border);
           border-radius: 8px;
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
           z-index: 50;
@@ -427,7 +458,7 @@ const Subscriptions = () => {
         .filter-title {
           font-size: 0.7rem;
           font-weight: 700;
-          color: #94a3b8;
+          color: var(--text-muted);
           text-transform: uppercase;
           padding: 0.5rem;
           border-bottom: 1px solid #f1f5f9;
@@ -446,7 +477,7 @@ const Subscriptions = () => {
         }
 
         .filter-option:hover {
-          background: #f1f5f9;
+          background: var(--input-bg);
         }
 
         .filter-option.selected {
@@ -458,8 +489,8 @@ const Subscriptions = () => {
           position: absolute;
           right: 0;
           top: 100%;
-          background: white;
-          border: 1px solid #e2e8f0;
+          background: var(--white);
+          border: 1px solid var(--border);
           border-radius: 8px;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
           z-index: 40;
@@ -482,7 +513,7 @@ const Subscriptions = () => {
         }
 
         .row-menu button:hover {
-          background: #f8fafc;
+          background: var(--input-bg);
         }
 
         .active-filter {

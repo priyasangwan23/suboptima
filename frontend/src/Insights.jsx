@@ -198,15 +198,15 @@ const Insights = () => {
             <div style={{ textAlign: 'center', padding: '5rem' }}>
               <Loader2 size={48} className="animate-spin" color="#5c4df3" style={{ margin: '0 auto 1.5rem' }} />
               <h3>Analyzing your stack...</h3>
-              <p style={{ color: '#64748b' }}>Our AI agent is scanning for waste and renewal alerts.</p>
+              <p style={{ color: 'var(--text-muted)' }}>Our AI agent is scanning for waste and renewal alerts.</p>
             </div>
           ) : !data || data.subscriptions.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '5rem', background: 'white', borderRadius: '24px', border: '1px dashed #cbd5e1' }}>
-              <div style={{ width: '80px', height: '80px', background: '#f8fafc', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#94a3b8' }}>
+            <div style={{ textAlign: 'center', padding: '5rem', background: 'var(--white)', borderRadius: '24px', border: '1px dashed #cbd5e1' }}>
+              <div style={{ width: '80px', height: '80px', background: 'var(--input-bg)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'var(--text-muted)' }}>
                 <LayoutGrid size={40} />
               </div>
               <h3>No data to analyze</h3>
-              <p style={{ color: '#64748b', marginBottom: '2rem' }}>Add some subscriptions to see AI-powered optimization insights.</p>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Add some subscriptions to see AI-powered optimization insights.</p>
               <Link to="/subscriptions/add" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-flex', padding: '0.75rem 1.5rem', borderRadius: '12px', background: '#5c4df3', color: 'white', fontWeight: 600 }}>
                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                 Connect Your First App
@@ -246,15 +246,15 @@ const Insights = () => {
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ef4444' }}>{data.summary.totalWasteCount}</div>
-                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8' }}>WASTE</div>
+                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)' }}>WASTE</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f59e0b' }}>{data.summary.totalWarningCount}</div>
-                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8' }}>WARNINGS</div>
+                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)' }}>WARNINGS</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#10b981' }}>{data.summary.totalHealthyCount}</div>
-                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8' }}>HEALTHY</div>
+                          <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)' }}>HEALTHY</div>
                         </div>
                       </div>
                     </div>
@@ -280,8 +280,8 @@ const Insights = () => {
                 </div>
                 
                 <div className="ai-card" style={{ 
-                  background: 'white', 
-                  border: '1px solid #e2e8f0', 
+                  background: 'var(--white)', 
+                  border: '1px solid var(--border)', 
                   borderRadius: '16px', 
                   padding: '1.5rem',
                   position: 'relative',
@@ -289,7 +289,7 @@ const Insights = () => {
                 }}>
                   <div className="ai-card-glow"></div>
                   {aiLoading ? (
-                    <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                    <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
                       <Loader2 size={32} className="animate-spin" style={{ margin: '0 auto 1rem', color: '#5c4df3' }} />
                       <p>Consulting Gemini AI for advanced optimizations...</p>
                     </div>
@@ -317,8 +317,8 @@ const Insights = () => {
                       <div style={{ width: '48px', height: '48px', background: '#f0efff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', color: '#5c4df3' }}>
                         <Sparkles size={24} />
                       </div>
-                      <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1e293b', marginBottom: '0.5rem' }}>Unlock AI-Powered Savings</h3>
-                      <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.5rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
+                      <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>Unlock AI-Powered Savings</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.5rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
                         Our Gemini AI can scan your entire subscription stack to find hidden overlaps, redundant services, and better pricing plans.
                       </p>
                       <button 
@@ -366,7 +366,7 @@ const Insights = () => {
                         <div key={sub._id} className="recommendation-card" style={{ borderTop: `4px solid ${styles.color}` }}>
                           <div className="card-top">
                             <div className="app-info">
-                              <div className="app-icon" style={{ background: '#f1f5f9', color: 'var(--primary)' }}>
+                              <div className="app-icon" style={{ background: 'var(--input-bg)', color: 'var(--primary)' }}>
                                 <LayoutGrid size={18} />
                               </div>
                               <div>
@@ -386,8 +386,14 @@ const Insights = () => {
                           <div className="reason-box" style={{ borderLeftColor: styles.color, background: styles.bg }}>
                             <p>
                               {sub.status === 'waste' 
-                                ? `This service hasn't been used in over 14 days and is costing $${sub.cost}/mo. We recommend cancelling immediately.`
-                                : `Upcoming renewal on ${new Date(sub.renewalDate).toLocaleDateString()}. Review usage before the billing cycle restarts.`
+                                ? (() => {
+                                    const daysInactive = Math.floor((new Date() - new Date(sub.lastUsedDate)) / (1000 * 60 * 60 * 24));
+                                    return `This service hasn't been used in ${daysInactive > 0 ? daysInactive : 'several'} days and is costing $${sub.cost}/mo. We recommend cancelling immediately.`;
+                                  })()
+                                : (() => {
+                                    const daysUntil = Math.ceil((new Date(sub.renewalDate) - new Date()) / (1000 * 60 * 60 * 24));
+                                    return `Upcoming renewal in ${daysUntil > 0 ? daysUntil : 0} days (on ${new Date(sub.renewalDate).toLocaleDateString()}). Review usage before the billing cycle restarts.`;
+                                  })()
                               }
                             </p>
                           </div>
@@ -401,9 +407,9 @@ const Insights = () => {
                       );
                     })
                   ) : (
-                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', background: '#f8fafc', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', background: 'var(--input-bg)', borderRadius: '16px', border: '1px solid var(--border)' }}>
                       <Info size={32} color="#94a3b8" style={{ margin: '0 auto 1rem' }} />
-                      <p style={{ color: '#64748b' }}>No critical actions required at this time. All services are healthy!</p>
+                      <p style={{ color: 'var(--text-muted)' }}>No critical actions required at this time. All services are healthy!</p>
                     </div>
                   )}
 
@@ -458,9 +464,9 @@ const Insights = () => {
 
         .insights-content { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         .insights-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .title-section h1 { font-size: 1.8rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem; }
-        .title-section p { color: #64748b; font-size: 0.9rem; }
-        .regenerate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; background: white; color: #5c4df3; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+        .title-section h1 { font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
+        .title-section p { color: var(--text-muted); font-size: 0.9rem; }
+        .regenerate-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--white); color: #5c4df3; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
         .insights-summary-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2.5rem; }
         .efficiency-card { background: linear-gradient(135deg, #5c4df3 0%, #3b2bc4 100%); border-radius: 16px; padding: 2rem; color: white; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px -5px rgba(92, 77, 243, 0.3); }
         .card-badge { display: flex; align-items: center; gap: 0.4rem; background: rgba(255, 255, 255, 0.2); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; width: fit-content; margin-bottom: 1.5rem; }
@@ -470,26 +476,26 @@ const Insights = () => {
         .value { font-size: 4rem; font-weight: 700; line-height: 1; }
         .decimals { font-size: 1.5rem; opacity: 0.7; }
         .card-footer-text { margin-top: 2rem; font-size: 0.85rem; line-height: 1.5; opacity: 0.9; }
-        .status-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .status-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; }
         .status-header { display: flex; gap: 1.5rem; }
         .status-icon-bg { width: 56px; height: 56px; background: #f0efff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .status-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; width: 100%; }
         .live-badge { font-size: 0.65rem; font-weight: 800; color: #10b981; background: #ecfdf5; padding: 0.25rem 0.6rem; border-radius: 4px; }
         .status-info { flex-grow: 1; }
         .progress-section { margin-top: 2rem; }
-        .progress-bar-container { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; margin-bottom: 0.75rem; }
+        .progress-bar-container { height: 8px; background: var(--input-bg); border-radius: 4px; overflow: hidden; margin-bottom: 0.75rem; }
         .progress-bar-fill { height: 100%; background: #5c4df3; border-radius: 4px; transition: width 0.5s ease; }
-        .progress-meta { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 700; color: #94a3b8; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
         .recommendations-section { margin-top: 3rem; }
         .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
-        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: #1e293b; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
         .recommendations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
-        .recommendation-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; }
+        .recommendation-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; }
         .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
         .app-info { display: flex; gap: 0.75rem; align-items: center; }
         .app-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .app-info h4 { font-size: 0.95rem; font-weight: 700; color: #1e293b; margin: 0; }
-        .app-info span { font-size: 0.8rem; color: #94a3b8; }
+        .app-info h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .app-info span { font-size: 0.8rem; color: var(--text-muted); }
         .savings-tag { text-align: right; }
         .amount-val { display: block; font-weight: 700; font-size: 1.1rem; }
         .savings-tag .label { font-size: 0.6rem; font-weight: 700; }
@@ -497,13 +503,13 @@ const Insights = () => {
         .reason-box p { font-size: 0.85rem; color: #475569; font-style: italic; line-height: 1.5; margin: 0; }
         .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
         .btn-secondary { background: #eff6ff; color: #3b82f6; border: none; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
-        .btn-outline { background: transparent; color: #94a3b8; border: 1px solid #e2e8f0; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
-        .scan-more-card { background: white; border: 1px dashed #cbd5e1; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center; position: relative; min-height: 250px; }
-        .scan-icon-plus { width: 48px; height: 48px; background: #f8fafc; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; margin-bottom: 1rem; }
-        .scan-more-card h3 { font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; }
-        .scan-more-card p { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .btn-outline { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .scan-more-card { background: var(--white); border: 1px dashed #cbd5e1; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center; position: relative; min-height: 250px; }
+        .scan-icon-plus { width: 48px; height: 48px; background: var(--input-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 1rem; }
+        .scan-more-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .scan-more-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
         .add-integration-btn { color: #5c4df3; background: transparent; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
-        .ai-monitor-badge { position: absolute; bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; background: white; padding: 0.4rem 1rem; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
+        .ai-monitor-badge { position: absolute; bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; background: var(--white); padding: 0.4rem 1rem; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
         .pulse-dot { width: 6px; height: 6px; background: #5c4df3; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(92, 77, 243, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(92, 77, 243, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(92, 77, 243, 0); } }
       `}</style>

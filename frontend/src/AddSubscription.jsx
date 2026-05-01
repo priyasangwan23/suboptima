@@ -114,7 +114,7 @@ const AddSubscription = () => {
           </div>
 
           {fetching ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
+            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
               <Loader2 size={32} className="animate-spin" style={{ margin: '0 auto 1rem' }} />
               <p>Fetching details...</p>
             </div>

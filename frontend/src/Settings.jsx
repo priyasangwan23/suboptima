@@ -21,13 +21,25 @@ import {
   Edit2
 } from 'lucide-react';
 
+import api from './api';
+
 const Settings = () => {
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('Profile');
+  const [formData, setFormData] = useState({ name: '', email: '', role: 'Product Manager', organization: 'SubOptima Core' });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+  
+  // Preferences
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [autoOptimize, setAutoOptimize] = useState(localStorage.getItem('autoOptimize') === 'true');
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setFormData(prev => ({ ...prev, name: parsedUser.name || '', email: parsedUser.email || '' }));
     }
   }, []);
 
@@ -35,6 +47,36 @@ const Settings = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = '/';
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      setIsSaving(true);
+      setSaveMessage('');
+      const response = await api.put('/auth/profile', { name: formData.name, email: formData.email });
+      setUser(response.data.user);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      setSaveMessage('Profile saved successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      console.error(error);
+      setSaveMessage('Failed to save profile.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  const toggleAutoOptimize = () => {
+    const newVal = !autoOptimize;
+    setAutoOptimize(newVal);
+    localStorage.setItem('autoOptimize', newVal);
   };
   return (
     <div className="dashboard-container">
@@ -123,83 +165,101 @@ const Settings = () => {
           </div>
 
           <div className="settings-tabs">
-            <button className="tab active">Profile</button>
-            <button className="tab">Billing</button>
-            <button className="tab">Preferences</button>
-            <button className="tab">Security</button>
+            {['Profile', 'Billing', 'Preferences', 'Security'].map(tab => (
+              <button 
+                key={tab}
+                className={`tab ${activeTab === tab ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           <div className="settings-layout">
             <div className="settings-main-column">
-              {/* Profile Section */}
-              <section className="settings-section">
-                <div className="section-title-row">
-                  <User size={20} color="#5c4df3" />
-                  <h2>Profile Section</h2>
-                </div>
-                
-                <div className="profile-edit-grid">
-                  <div className="avatar-edit">
-                    <div className="avatar-initial" style={{ width: '100px', height: '100px', fontSize: '2.5rem' }}>
-                      {user?.name ? user.name.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase() || 'U'}
-                    </div>
+              {activeTab === 'Profile' && (
+                <section className="settings-section">
+                  <div className="section-title-row">
+                    <User size={20} color="#5c4df3" />
+                    <h2>Profile Section</h2>
                   </div>
                   
-                  <div className="profile-form">
-                    <div className="form-grid">
-                      <div className="field-group">
-                        <label>Full Name</label>
-                        <input type="text" defaultValue={user?.name || ""} placeholder="Your Name" />
-                      </div>
-                      <div className="field-group">
-                        <label>Email Address</label>
-                        <input type="email" defaultValue={user?.email || ""} placeholder="your@email.com" />
-                      </div>
-                      <div className="field-group">
-                        <label>Role</label>
-                        <input type="text" defaultValue="Product Manager" />
-                      </div>
-                      <div className="field-group">
-                        <label>Organization</label>
-                        <input type="text" defaultValue="SubOptima Core" />
+                  <div className="profile-edit-grid">
+                    <div className="avatar-edit">
+                      <div className="avatar-initial" style={{ width: '100px', height: '100px', fontSize: '2.5rem' }}>
+                        {user?.name ? user.name.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase() || 'U'}
                       </div>
                     </div>
-                    <div className="form-actions">
-                      <button className="save-btn">Save Changes</button>
+                    
+                    <div className="profile-form">
+                      <div className="form-grid">
+                        <div className="field-group">
+                          <label>Full Name</label>
+                          <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Your Name" />
+                        </div>
+                        <div className="field-group">
+                          <label>Email Address</label>
+                          <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="your@email.com" />
+                        </div>
+                        <div className="field-group">
+                          <label>Role</label>
+                          <input type="text" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} />
+                        </div>
+                        <div className="field-group">
+                          <label>Organization</label>
+                          <input type="text" value={formData.organization} onChange={e => setFormData({...formData, organization: e.target.value})} />
+                        </div>
+                      </div>
+                      <div className="form-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        {saveMessage && <span style={{ color: saveMessage.includes('Failed') ? '#ef4444' : '#10b981', fontSize: '0.85rem' }}>{saveMessage}</span>}
+                        <button className="save-btn" onClick={handleSaveProfile} disabled={isSaving}>
+                          {isSaving ? 'Saving...' : 'Save Changes'}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
 
-              {/* Preference Section */}
-              <section className="settings-section">
-                <div className="section-title-row">
-                  <Palette size={20} color="#5c4df3" />
-                  <h2>Preference Section</h2>
-                </div>
-                
-                <div className="preferences-list">
-                  <div className="preference-item">
-                    <div className="pref-info">
-                      <h3>Theme Settings</h3>
-                      <p>Switch between light and dark visual modes</p>
-                    </div>
-                    <div className="toggle-switch active">
-                      <div className="toggle-knob"></div>
-                    </div>
+              {activeTab === 'Preferences' && (
+                <section className="settings-section">
+                  <div className="section-title-row">
+                    <Palette size={20} color="#5c4df3" />
+                    <h2>Preference Section</h2>
                   </div>
                   
-                  <div className="preference-item">
-                    <div className="pref-info">
-                      <h3>Auto-Optimization</h3>
-                      <p>Allow AI to automatically suggest daily improvements</p>
+                  <div className="preferences-list">
+                    <div className="preference-item">
+                      <div className="pref-info">
+                        <h3>Theme Settings</h3>
+                        <p>Current theme: {theme === 'light' ? 'Light Mode' : 'Dark Mode'}</p>
+                      </div>
+                      <div className={`toggle-switch ${theme === 'dark' ? 'active' : ''}`} onClick={toggleTheme}>
+                        <div className="toggle-knob"></div>
+                      </div>
                     </div>
-                    <div className="toggle-switch">
-                      <div className="toggle-knob"></div>
+                    
+                    <div className="preference-item">
+                      <div className="pref-info">
+                        <h3>Auto-Optimization</h3>
+                        <p>Allow AI to automatically suggest daily improvements</p>
+                      </div>
+                      <div className={`toggle-switch ${autoOptimize ? 'active' : ''}`} onClick={toggleAutoOptimize}>
+                        <div className="toggle-knob"></div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
+
+              {(activeTab === 'Billing' || activeTab === 'Security') && (
+                <section className="settings-section" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                  <Shield size={48} color="#94a3b8" style={{ margin: '0 auto 1rem' }} />
+                  <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{activeTab} Settings</h2>
+                  <p style={{ color: 'var(--text-muted)' }}>These features are currently in development.</p>
+                </section>
+              )}
             </div>
 
             <div className="settings-sidebar-column">
@@ -220,7 +280,7 @@ const Settings = () => {
                     <strong>1,240 / 5,000</strong>
                   </div>
                 </div>
-                <button className="manage-billing-btn">Manage Billing Details</button>
+                <button className="manage-billing-btn" onClick={() => setActiveTab('Billing')}>Manage Billing Details</button>
               </div>
 
               {/* Logout Section */}
@@ -288,12 +348,12 @@ const Settings = () => {
         .settings-header h1 {
           font-size: 2rem;
           font-weight: 700;
-          color: #1e293b;
+          color: var(--text-main);
           margin-bottom: 0.5rem;
         }
 
         .settings-header p {
-          color: #64748b;
+          color: var(--text-muted);
           font-size: 0.95rem;
           margin-bottom: 2rem;
         }
@@ -311,7 +371,7 @@ const Settings = () => {
           border: none;
           border-bottom: 2px solid transparent;
           font-weight: 500;
-          color: #64748b;
+          color: var(--text-muted);
           cursor: pointer;
           transition: all 0.2s;
         }
@@ -328,8 +388,8 @@ const Settings = () => {
         }
 
         .settings-section {
-          background: white;
-          border: 1px solid #e2e8f0;
+          background: var(--white);
+          border: 1px solid var(--border);
           border-radius: 16px;
           padding: 2rem;
           margin-bottom: 2rem;
@@ -345,7 +405,7 @@ const Settings = () => {
         .section-title-row h2 {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #1e293b;
+          color: var(--text-main);
         }
 
         .profile-edit-grid {
@@ -401,16 +461,16 @@ const Settings = () => {
         .field-group label {
           font-size: 0.85rem;
           font-weight: 600;
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         .field-group input {
           padding: 0.75rem 1rem;
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--border);
           border-radius: 8px;
-          background: #f8fafc;
+          background: var(--input-bg);
           font-size: 0.9rem;
-          color: #1e293b;
+          color: var(--text-main);
         }
 
         .form-actions {
@@ -440,20 +500,21 @@ const Settings = () => {
           justify-content: space-between;
           align-items: center;
           padding: 1.25rem;
-          background: #f0f4ff;
+          background: var(--input-bg);
           border-radius: 12px;
+          border: 1px solid var(--border);
         }
 
         .pref-info h3 {
           font-size: 1rem;
           font-weight: 600;
-          color: #1e293b;
+          color: var(--text-main);
           margin-bottom: 0.25rem;
         }
 
         .pref-info p {
           font-size: 0.85rem;
-          color: #64748b;
+          color: var(--text-muted);
         }
 
         .toggle-switch {
@@ -475,7 +536,7 @@ const Settings = () => {
         .toggle-knob {
           width: 20px;
           height: 20px;
-          background: white;
+          background: #ffffff;
           border-radius: 50%;
           transition: transform 0.2s;
         }
@@ -485,8 +546,8 @@ const Settings = () => {
         }
 
         .account-status-card {
-          background: white;
-          border: 1px solid #e2e8f0;
+          background: var(--white);
+          border: 1px solid var(--border);
           border-radius: 16px;
           padding: 1.5rem;
           margin-bottom: 1.5rem;
@@ -525,8 +586,8 @@ const Settings = () => {
           margin-bottom: 0.75rem;
         }
 
-        .stat-line span { color: #64748b; }
-        .stat-line strong { color: #1e293b; }
+        .stat-line span { color: var(--text-muted); }
+        .stat-line strong { color: var(--text-main); }
 
         .manage-billing-btn {
           width: 100%;
@@ -540,15 +601,15 @@ const Settings = () => {
         }
 
         .logout-card {
-          background: #fffafa;
-          border: 1px solid #fee2e2;
+          background: var(--input-bg);
+          border: 1px solid var(--border);
           border-radius: 16px;
           padding: 1.5rem;
           margin-bottom: 1.5rem;
         }
 
         .danger-text { color: #dc2626; margin-bottom: 0.5rem; }
-        .logout-card p { font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem; }
+        .logout-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
 
         .logout-btn {
           width: 100%;
