@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import insightRoutes from './routes/insightRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/insights', insightRoutes);
+app.use('/api/ai-insights', aiRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
