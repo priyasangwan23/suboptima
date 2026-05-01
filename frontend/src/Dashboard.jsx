@@ -24,7 +24,9 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalSubscriptions: 0,
     totalMonthlySpend: 0,
-    potentialWaste: 0
+    potentialWaste: 0,
+    optimizationScore: 100,
+    spendingTrend: []
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -194,10 +196,14 @@ const Dashboard = () => {
               <span className="stat-label">Optimization Score</span>
               <div className="stat-icon"><TrendingUp size={16} /></div>
             </div>
-            <div className="stat-value">84%</div>
-            <div className="progress-container" style={{height: '8px', background: '#e2e8f0'}}>
-              <div className="progress-bar" style={{width: '84%', background: '#10b981'}}></div>
-            </div>
+            {loading ? <Loader2 className="animate-spin" size={20} color="#94a3b8" /> : (
+              <>
+                <div className="stat-value">{stats.optimizationScore}%</div>
+                <div className="progress-container" style={{height: '8px', background: '#e2e8f0', marginTop: '1rem', borderRadius: '4px', overflow: 'hidden'}}>
+                  <div className="progress-bar" style={{width: `${stats.optimizationScore}%`, background: stats.optimizationScore < 70 ? '#ef4444' : stats.optimizationScore < 90 ? '#f59e0b' : '#10b981', height: '100%', transition: 'width 1s ease-in-out'}}></div>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -208,19 +214,25 @@ const Dashboard = () => {
               Spending Trend (Last 6 Months)
               <div style={{display: 'flex', gap: '1rem', fontSize: '0.8rem'}}>
                 <span style={{fontWeight: 700}}>Month</span>
-                <span style={{color: '#94a3b8'}}>Quarter</span>
+                <span style={{color: 'var(--text-muted)'}}>Quarter</span>
               </div>
             </div>
             <div style={{height: '300px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 1rem'}}>
-               {/* Mock Chart Bars */}
-               {[40, 60, 45, 80, 55, 70].map((h, i) => (
-                 <div key={i} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem'}}>
-                    <div style={{width: '40px', height: `${h * 2}px`, background: i === 3 ? '#5c4df3' : '#eef2ff', borderRadius: '8px 8px 0 0'}}></div>
-                    <span style={{fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600}}>
-                      {['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN'][i]}
+               {stats.spendingTrend && stats.spendingTrend.length > 0 ? stats.spendingTrend.map((m, i) => {
+                 const maxSpend = Math.max(...stats.spendingTrend.map(s => s.spend), 1);
+                 const heightPct = (m.spend / maxSpend) * 100 || 5; // at least 5% visual
+                 return (
+                 <div key={i} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', width: '100%'}}>
+                    <div style={{width: '40px', height: `${heightPct * 2}px`, background: i === stats.spendingTrend.length - 1 ? '#5c4df3' : '#eef2ff', borderRadius: '8px 8px 0 0', transition: 'height 1s ease-out'}}></div>
+                    <span style={{fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600}}>
+                      {m.month}
                     </span>
                  </div>
-               ))}
+               )}) : (
+                 <div style={{width: '100%', textAlign: 'center', color: 'var(--text-muted)', marginBottom: '2rem'}}>
+                   {loading ? <Loader2 className="animate-spin" size={24} style={{margin: '0 auto'}} /> : 'No spending data available'}
+                 </div>
+               )}
             </div>
           </div>
 
@@ -245,23 +257,23 @@ const Dashboard = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
+              <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
                 <TrendingUp size={32} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
                 <p>Great job! No waste detected in your current stack.</p>
               </div>
             )}
 
             <div className="quick-actions-section" style={{marginTop: '2rem'}}>
-               <p style={{fontSize: '0.85rem', fontWeight: 600, color: '#94a3b8', marginBottom: '1rem'}}>Quick Actions</p>
+               <p style={{fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '1rem'}}>Quick Actions</p>
                <div className="quick-actions-row">
                  <Link to="/subscriptions/add" className="action-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Plus size={24} color="#94a3b8" />
                     <span>Add New</span>
                  </Link>
-                 <div className="action-card">
+                 <Link to="/subscriptions" className="action-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <Download size={24} color="#94a3b8" />
                     <span>Export CSV</span>
-                 </div>
+                 </Link>
                </div>
             </div>
           </div>

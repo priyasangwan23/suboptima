@@ -25,12 +25,12 @@ export const getInsights = async (req, res) => {
       const isUpcomingRenewal = sub.renewalDate > now && sub.renewalDate <= fiveDaysFromNow;
 
       // Classification Logic
-      if (isUpcomingRenewal) {
-        status = 'warning';
-        totalWarningCount++;
-      } else if (isInactive && sub.cost > 300) {
+      if (isInactive) {
         status = 'waste';
         totalWasteCount++;
+      } else if (isUpcomingRenewal) {
+        status = 'warning';
+        totalWarningCount++;
       } else {
         status = 'healthy';
         totalHealthyCount++;

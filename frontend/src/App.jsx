@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
@@ -10,6 +11,13 @@ import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 
 function App() {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
