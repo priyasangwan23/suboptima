@@ -106,13 +106,6 @@ AI integration provides:
 
 ---
 
-### 📤 File Upload
-
-- Upload invoices or screenshots  
-- Preview before upload  
-- File validation  
-
----
 
 ### 🔔 Notifications
 
@@ -170,6 +163,18 @@ AI integration provides:
 - API integration  
 - AI usage in real applications  
 - UI/UX optimization  
+
+---
+
+## Live demo:
+
+https://suboptima.vercel.app/
+
+---
+
+## 🎨 Figma Design
+
+*Figma Link:* https://www.figma.com/design/ybGQ0oFi8ljSuHg6fmWO2J/Untitled?node-id=185-560&t=izSAbMr8QuBZXXl6-1
 
 ---
 
