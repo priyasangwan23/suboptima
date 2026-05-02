@@ -177,6 +177,87 @@ AI integration provides:
 
 ---
 
+## 📁 Project Structure
+
+```
+project_suboptima/
+└── suboptima/
+    ├── backend/
+    │   ├── config/            # App & DB configuration
+    │   ├── controllers/       # Route logic
+    │   ├── middleware/        # Auth & error handling
+    │   ├── models/            # Mongoose schemas
+    │   ├── routes/            # API routes
+    │   ├── scratch/           # Temporary/testing files
+    │   ├── .env               # Environment variables
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   └── server.js          # Backend entry point
+    │
+    └── frontend/
+        ├── dist/              # Production build
+        ├── node_modules/
+        ├── public/            # Static assets
+        ├── src/               # React source code
+        ├── .gitignore
+        ├── eslint.config.js
+        ├── index.html
+        ├── package.json
+        └── package-lock.json
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/priyasangwan23/suboptima
+cd project_suboptima/suboptima
+```
+
+---
+
+### 2. Setup Backend
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in the `backend` folder:
+
+```
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
+```
+
+Run the backend server:
+
+```bash
+npm run dev
+```
+
+---
+
+### 3. Setup Frontend
+
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
+
+---
+
+## ▶️ Run the Application
+
+* Backend: http://localhost:5000
+* Frontend: http://localhost:5173
+
+---
 
 ## 📈 Future Improvements
 
